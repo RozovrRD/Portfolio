@@ -3,7 +3,7 @@ from telebot import types
 import sqlite3
 
 
-bot = telebot.TeleBot('6689001419:AAF5kYVyrSJbmciKMEP3uFSHgeEiDj1w7lc') # получаем доступ к боту
+bot = telebot.TeleBot('token') # получаем доступ к боту
 quiz_bd_info = list()
 question_number = 0
 score = 0
