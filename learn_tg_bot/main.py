@@ -1,4 +1,5 @@
 import telebot
+from telebot import types
 import psycopg2
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
@@ -31,7 +32,31 @@ def user_name(message):
         session.add(new_user)
         session.commit()
     session.close()
+    bot.send_message(message.chat.id, 'Регистрация прошла успешно. Чтобы узнать возможности бота пиши /help')
+
+
+
+@bot.message_handler(commands=['help'])
+def help_info(message):
+    bot.send_message(message.chat.id, '/site выведет список основных сайтов и можно будет на них перейти')
+    bot.send_message(message.chat.id, '/alarm напоминалка, которая предупредит тебя о запланированном деле заранее')
+    bot.send_message(message.chat.id, '/lifenumber посчитает выаше число жизни по дате рождения')
+    bot.send_message(message.chat.id, '/weather выведет погоду в указанном городе')
+
+
+
+@bot.message_handler(commands=['site'])
+def site_link(message):
+    markup = types.InlineKeyboardMarkup()
+    btn1 = types.InlineKeyboardButton('Перейти на сайт google.com', url='https://google.com')
+    btn2 = types.InlineKeyboardButton('Перейти на сайт stepik.org', url='https://stepik.org/')
+    btn3 = types.InlineKeyboardButton('Перейти на сайт github.com', url='https://github.com/')
+    markup.row(btn1)
+    markup.row(btn2, btn3)
+    bot.send_message(message.chat.id, 'Чтобы перейти на сайт нажми на соответствующую кнопку', reply_markup=markup)
+
+
+
+
 
 bot.polling(none_stop=True)
-
-
