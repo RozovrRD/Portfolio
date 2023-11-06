@@ -7,9 +7,9 @@ from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT    # когда фа�
 
 host = "localhost"
 user = "postgres"
-password = "bd_pass"
-db_name = "tg_test_db_users"
-port = '5432'
+password = ""
+db_name = ""
+port = ''
 
 # connection = psycopg2.connect(user=user, password=password)   эти строки создают бд в пгадмин4
 # connection.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT) # это нужно чтобы избежать ошибки во время создания бд (нельзя выполнить создангие бд внутри блока транзакции)

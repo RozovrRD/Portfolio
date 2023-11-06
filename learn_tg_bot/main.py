@@ -4,11 +4,14 @@ import psycopg2
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 from config import host, user, password, db_name, port, Users
+import requests
+import json
 
 
-bot = telebot.TeleBot('token')
+bot = telebot.TeleBot('')
 url = f"postgresql+psycopg2://{user}:{password}@{host}:{port}/{db_name}"   #строка подключения к бд
 engine = create_engine(url)
+API_Weather_key = ''
 
 
 @bot.message_handler(commands=['start'])
@@ -40,7 +43,7 @@ def user_name(message):
 def help_info(message):
     bot.send_message(message.chat.id, '/site выведет список основных сайтов и можно будет на них перейти')
     bot.send_message(message.chat.id, '/alarm напоминалка, которая предупредит тебя о запланированном деле заранее')
-    bot.send_message(message.chat.id, '/lifenumber посчитает выаше число жизни по дате рождения')
+    bot.send_message(message.chat.id, '/lifenumber посчитает ваше число жизни по дате рождения')
     bot.send_message(message.chat.id, '/weather выведет погоду в указанном городе')
 
 
@@ -56,6 +59,18 @@ def site_link(message):
     bot.send_message(message.chat.id, 'Чтобы перейти на сайт нажми на соответствующую кнопку', reply_markup=markup)
 
 
+@bot.message_handler(commands=['weather'])
+def sity_taker(message):
+    city_name = bot.send_message(message.chat.id, 'Напиши название населенного пункта, в котором хочешь узнать погоду')
+    bot.register_next_step_handler(city_name, get_weather)
+
+
+def get_weather(massage):
+    city = massage.text.strip().lower()
+    res = requests.get(f'https://api.openweathermap.org/data/2.5/weather?q={city}&lang=ru&appid={API_Weather_key}&units=metric')
+    data = json.loads(res.text)
+    #bot.reply_to(massage, f'Сейчас погода: {data["main"]["temp"]}')
+    bot.reply_to(massage, f'{data["name"]}: {data["weather"][0]["description"]}, за окном {data["main"]["temp"]} градуса')
 
 
 
