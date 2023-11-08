@@ -14,25 +14,27 @@ def create_roots_and_coef(count_of_equations):
         x2 = randint(-30, 30)
         new_key = tuple([x1, x2])
         if new_key not in roots_coefficients.keys():
-            a = randint(-10, 10)
-            b = randint(-10, 10)
+            a = 1
+            b = 1
             roots_coefficients[new_key] = (a, b)
     return roots_coefficients
 
 
-equation_count = int(input('Enter equations count: '))
-
-equation_components = create_roots_and_coef(equation_count)
-
-
 def print_equation():
+    equation_components = create_roots_and_coef(1)
     for key, value in equation_components.items():
         A, B, C = create_coefficients(key[0], key[1], value[0], value[1])
-        if B >= 0:
-            print(A, 'x^2 + ', B, 'x ', sep='', end='')
+        if B == 1:
+            answer_str = 'x^2 + x '
+        elif B == -1:
+            answer_str = 'x^2 - x '
+        elif B >= 0 and B > 1:
+            answer_str = 'x^2 + ' + str(B) + 'x '
         else:
-            print(A, 'x^2 ', B, 'x ', sep='', end='')
+            answer_str = 'x^2 ' + '- ' + str(abs(B)) + 'x '
         if C >= 0:
-            print('+', C, '= 0', 'roots:', key[0], key[1])
+            answer_str = answer_str + '+ ' + str(C) + ' = 0'
         else:
-            print(C, '= 0', 'roots:', key[0], key[1])
+            answer_str = answer_str + '- ' + str(abs(C)) + ' = 0'
+        return answer_str, key[0], key[1]
+
